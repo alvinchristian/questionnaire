@@ -10,7 +10,7 @@ docker run -d \
     ghcr.io/kawijayaa/questionnaire
 ```
 
-A configurable questionnaire program designed for CTF challenges that requires users to answer questions to solve the challenge. Supports multi-answer questions, unordered list-based answers and case insensitivity.
+A configurable questionnaire program designed for CTF challenges that requires users to answer questions to solve the challenge. Supports multi-answer questions, unordered list-based answers, case insensitivity, and contextual notes linked to sections or individual questions.
 
 ## Local Development
 

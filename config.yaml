@@ -38,6 +38,12 @@ ui:
   # Style of the section box (Default: "yellow")
   section_style: "bold yellow"
 
+  # Style used for notes under sections/questions. (Default: "bold bright_white")
+  note_style: "bold bright_white"
+
+  # Border color/style of note boxes. (Default: "blue")
+  note_panel_style: "blue"
+
   # Type of border. Types: rounded, heavy, square, double, ascii. (Default: "heavy")
   border_type: "rounded"
 
@@ -59,8 +65,15 @@ theme:
 
 sections:
   - name: "Part 1: Reconnaisance"
+    notes:
+    - "All answers in this section come from initial recon artifacts."
     questions:
     - question: "What ports are open on the machine?"
+      notes:
+      # Optional per-block override for following notes in this list:
+      - panel_style: "cyan"
+      - "Provide all open ports from the scan result."
+      - "The order of the ports does not matter."
       answer:
         - "22"
         - "80"
