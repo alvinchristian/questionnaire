@@ -1,0 +1,236 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Questionnaire Config Schema",
+  "description": "Schema for questionnaire config.yaml file",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["config", "sections"],
+  "properties": {
+    "config": {
+      "type": "object",
+      "description": "Global configuration settings",
+      "additionalProperties": false,
+      "properties": {
+        "flag": {
+          "type": "string",
+          "description": "Flag that will be printed when all questions are answered correctly"
+        },
+        "header_text": {
+          "type": "string",
+          "description": "Text that will be printed first on startup"
+        },
+        "win_text": {
+          "type": "string",
+          "description": "Text printed after all questions are answered correctly and before printing the flag"
+        },
+        "case_sensitive": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable answer case sensitivity. If false, 'Nmap' == 'nmap'"
+        },
+        "can_skip": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable/disable skipping questions. If true, user can answer incorrectly and program continues. If false, program exits on wrong answer"
+        },
+        "array_delimiter": {
+          "type": "string",
+          "default": ",",
+          "description": "Character used to split user input for 'array' type questions"
+        },
+        "numbering": {
+          "type": "string",
+          "enum": ["section", "global"],
+          "default": "global",
+          "description": "Set the numbering type. 'section' counts per section, 'global' counts sequentially"
+        }
+      }
+    },
+    "ui": {
+      "type": "object",
+      "description": "UI styling configuration",
+      "additionalProperties": false,
+      "properties": {
+        "panel_style": {
+          "type": "string",
+          "default": "blue",
+          "description": "Style of the question box"
+        },
+        "header_style": {
+          "type": "string",
+          "default": "bold cyan",
+          "description": "Style of the header"
+        },
+        "section_style": {
+          "type": "string",
+          "default": "yellow",
+          "description": "Style of the section box"
+        },
+        "note_style": {
+          "type": "string",
+          "default": "bold bright_white",
+          "description": "Style used for notes under sections/questions"
+        },
+        "note_panel_style": {
+          "type": "string",
+          "default": "blue",
+          "description": "Border color/style of note boxes"
+        },
+        "border_type": {
+          "type": "string",
+          "enum": ["rounded", "heavy", "square", "double", "ascii"],
+          "default": "heavy",
+          "description": "Type of border"
+        }
+      }
+    },
+    "theme": {
+      "type": "object",
+      "description": "Theme color/style configuration",
+      "additionalProperties": false,
+      "properties": {
+        "info": {
+          "type": "string",
+          "default": "cyan",
+          "description": "Style used for 'win_text' and question header"
+        },
+        "error": {
+          "type": "string",
+          "default": "bold red",
+          "description": "Style used on wrong answer"
+        },
+        "success": {
+          "type": "string",
+          "default": "bold green",
+          "description": "Style used on correct answer"
+        },
+        "question": {
+          "type": "string",
+          "default": "bold white",
+          "description": "Style used for the question text"
+        },
+        "prompt": {
+          "type": "string",
+          "default": "bold yellow",
+          "description": "Style used for the prompt"
+        }
+      }
+    },
+    "sections": {
+      "type": "array",
+      "description": "Array of question sections",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "questions"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the section"
+          },
+          "style": {
+            "type": "string",
+            "description": "Optional style override for this section"
+          },
+          "notes": {
+            "type": "array",
+            "description": "Optional notes for the section",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "description": "Note text"
+                },
+                {
+                  "type": "object",
+                  "description": "Note with style override",
+                  "additionalProperties": false,
+                  "properties": {
+                    "panel_style": {
+                      "type": "string",
+                      "description": "Override panel style for following notes"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "questions": {
+            "type": "array",
+            "description": "Array of questions in this section",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["question", "answer"],
+              "properties": {
+                "question": {
+                  "type": "string",
+                  "description": "The question text"
+                },
+                "notes": {
+                  "type": "array",
+                  "description": "Optional notes for this question",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "type": "string",
+                        "description": "Note text"
+                      },
+                      {
+                        "type": "object",
+                        "description": "Note with style override",
+                        "additionalProperties": false,
+                        "properties": {
+                          "panel_style": {
+                            "type": "string",
+                            "description": "Override panel style for following notes"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "answer": {
+                  "oneOf": [
+                    {
+                      "type": "string",
+                      "description": "Single answer"
+                    },
+                    {
+                      "type": "array",
+                      "description": "Multiple acceptable answers",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  ],
+                  "description": "Correct answer(s) for the question"
+                },
+                "config": {
+                  "type": "object",
+                  "description": "Optional per-question configuration",
+                  "additionalProperties": false,
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": ["array", "multi"],
+                      "description": "'array' requires all answers in any order, 'multi' accepts any one of the answers"
+                    },
+                    "format": {
+                      "type": "string",
+                      "description": "Format hint to help the user understand expected input"
+                    },
+                    "case_sensitive": {
+                      "type": "boolean",
+                      "description": "Override global case_sensitive setting for this question"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
